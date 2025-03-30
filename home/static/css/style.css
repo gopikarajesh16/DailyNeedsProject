@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #cfd2cf;
+  text-align: center;
+  padding: 15px;
+  text-align: center;
+}
+
+
+/* Navbar Styling */
+.navbar {
+  background-color: #10487c;
+}
+
+.navbar-brand, .nav-link {
+  color: rgb(235, 224, 224) !important;
+  font-size: 18px;
+}
+
+.nav-link:hover {
+  color: yellow !important;
+}
+
+/* Search Bar */
+.form-inline input {
+  border-radius: 20px;
+  padding: 5px 15px;
+}
+
+.btn-outline-success {
+  border-radius: 20px;
+  color: white;
+  border: 1px solid white;
+}
+
+.btn-outline-success:hover {
+  background-color: greenyellow;
+  color: black;
+}
+
+/* Chat Button */
+.btn1 {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn1:hover {
+  background-color: #218838;
+}
+
+.navbar{
+  width: 100%;
+  padding: 15px 50px; /* Adjust padding for better spacing */
+  justify-content: center;
+}
+
+
+
+.navbar-nav {
+  margin: auto;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.form-inline {
+  margin-left: auto; /* Push search form to the right */
+}
+
+
+.navbar {
+  width: 100%;
+  padding: 15px 50px; /* Adjust padding for better spacing */
+  justify-content: center;
+}
+
+.navbar-nav {
+  margin: auto;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.form-inline {
+  margin-left: auto; /* Push search form to the right */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

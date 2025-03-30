@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block content%}
+
+<h5>About My Page</h5>
+
+    <p>Baking is a method of preparing food that uses dry heat, typically in an oven, but can also be done in hot ashes, or on hot stones. The most common baked item is bread, but many other types of foods can be baked.</p>
+
+    
+<div class="abc" style="display: flex;justify-content:space-evenly ;">
+
+
+
+
+{% for i in school %}
+
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="/media/{{i.image}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{i.name}}</h5>
+      <p class="card-text">{{i.department}}</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+
+
+
+{% endfor %}
+    
+</div>
+    
+{% endblock %}

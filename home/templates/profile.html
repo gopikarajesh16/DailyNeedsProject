@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %} My Profile {% endblock %}
+
+{% block content %}
+<style>
+    .profile-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #e3f2fd;
+        padding: 20px;
+    }
+    .profile-box {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .profile-title {
+        color: #2e7d32;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 3px solid #2e7d32;
+    }
+    .profile-info {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 8px;
+        text-align: left;
+        padding-left: 10px;
+    }
+    .profile-details {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .profile-form {
+        text-align: left;
+    }
+    .profile-form label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+    .profile-form input,
+    .profile-form textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .profile-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .profile-buttons button,
+    .profile-buttons a {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+    }
+    .save-btn {
+        background-color: #2e7d32;
+        margin-right: 10px;
+    }
+    .cancel-btn {
+        background-color: #757575;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-box">
+        <h2 class="profile-title">My Profile</h2>
+        {% if user.profile.image %}
+            <img src="/media/{{ user.profile.image }}" alt="Profile Image" class="profile-img">
+        {% endif %}
+
+        <div class="profile-details">
+            <h1 class="profile-info"><strong>{{ user.first_name }} {{ user.last_name }}</strong></h1>
+            <p class="profile-info"><strong>Username:</strong> {{ user.username }}</p>
+            <p class="profile-info"><strong>Email:</strong> {{ user.email }}</p>
+            <p class="profile-info"><strong>Phone:</strong> {{ user.profile.phone }}</p>
+            <p class="profile-info"><strong>Address:</strong> {{ user.profile.address }}</p>
+        </div>
+
+        <h2 class="profile-title">Update Profile</h2>
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="profile-buttons">
+                <button type="submit" class="save-btn">Save Changes</button>
+                <a href="/" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

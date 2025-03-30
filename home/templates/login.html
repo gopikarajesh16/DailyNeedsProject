@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffe0b2;
+        margin: 0;
+        padding: 0;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 85vh;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 350px;
+    }
+
+    h2 {
+        font-size: 24px;
+        color: #2e7d32;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #4e342e;
+    }
+
+    .form-control {
+        font-size: 16px;
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn {
+        font-size: 16px;
+        background-color: #e53935;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn:hover {
+        background-color: #c62828;
+    }
+
+    .alert {
+        font-size: 16px;
+        background-color: #ffdddd;
+        color: #d32f2f;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    img {
+        width: 300px;
+        height: auto;
+        display: block;
+        margin: 40px auto 20px;
+        border-radius: 10px;
+        animation: bounce 2s infinite alternate;
+    }
+
+    @keyframes bounce {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            width: 90%;
+            padding: 20px;
+        }
+
+        img {
+            width: 80%;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <!-- <img src="https://static.vecteezy.com/system/resources/previews/049/569/939/non_2x/shopping-cart-with-fresh-fruits-and-vegetables-illustration-vector.jpg" alt="Grocery Image"> -->
+    
+    <div class="container">
+        <h2>Healthy choices, happy lives! Log in to make yours.</h2>
+        <p>Grocery shopping has never been this much fun.</p>
+        
+        {% if er %}
+        <div class="alert">
+            {{ er }}
+        </div>
+        {% endif %}
+        
+        <form action="/login/" method="POST">
+            {% csrf_token %}
+            <input type="text" name="uname" placeholder="Username" class="form-control" required>
+            <input type="password" name="psw1" placeholder="Password" class="form-control" required>
+            <button type="submit" class="btn">Log In</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

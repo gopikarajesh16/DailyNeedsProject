@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div style="font-family: Arial, sans-serif; background-color: #dce9ec; margin: 0; padding: 0; min-height: 100vh;">
+
+    <!-- Category Links -->
+    {% if request.path != "/product/" %}
+        <div class="category-links" style="display: flex; justify-content: center; gap: 20px; padding: 15px;">
+            {% for i in cat %}
+                <a href="/category/{{i.id}}" 
+                style="font-size: 20px; color: #2e7d32; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 5px; transition: background-color 0.3s, color 0.3s; margin-top: 5px;" 
+                onmouseover="this.style.backgroundColor='#c8e6c9'; this.style.color='#1b5e20';" 
+                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#2e7d32';">
+                {{i.name}}
+                </a>
+            {% endfor %}
+        </div>
+
+    {% else %} 
+
+    <h2 style="text-align: center; color: #2e7d32; margin-top: 20px;">Your Products</h2>
+    
+    {% endif %}
+
+
+    <!-- Product Cards -->
+    <div class="main" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px;">
+        {% for i in pro %}
+        <div class="card" style="background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 250px; text-align: center; padding: 15px;">
+            <img src="/media/{{ i.image }}" style="width: 100%; height: 250px; border-radius: 10px;" alt="{{ i.name }}">
+            <h5 style="margin-top: 10px;">{{ i.name }}</h5>
+            <p style="color: #555;">{{ i.details }}</p>
+            <p style="font-weight: bold; color: #2e7d32;">RS:{{ i.price|floatformat:2 }}</p>
+
+            {% if request.path == "/product/" %}
+                <a href="{% url 'viewproduct' i.id %}" style="background-color: #2e7d32; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px;">View Product</a>
+                
+                <!-- EDIT & DELETE BUTTONS (FOR ADMIN) -->
+                <a href="/editproduct/{{i.id}}" style="background-color: #1976d2; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 5px;">Edit</a>
+                <a href="/deleteproduct/{{i.id}}" style="background-color: #d32f2f; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 5px;">Delete</a>
+            
+            {% else %}
+                <button onclick="incrementCount(this, '{{ i.id }}', '{{ i.name }}', '{{ i.price }}')" style="background-color: #388e3c; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Add to Cart</button>
+                <span id="count-{{ i.id }}" style="font-size: 18px; font-weight: bold;">0</span>
+                <button onclick="decrementCount(this, '{{ i.id }}')" style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Remove</button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Admin Options -->
+    {% if request.path == "/product/" %}
+        <a href="/addproduct" style="background-color: #ff7043; color: white; padding: 12px 18px; text-decoration: none; border-radius: 5px; display: block; text-align: center; margin: 20px auto; width: 200px;">Add Products</a>
+    {% endif %}
+
+    <!-- Checkout Button -->
+    {% if request.path != "/product/" %}
+        <button onclick="proceedToCheckout()" style="background-color: #388e3c; color: white; padding: 12px 18px; border: none; border-radius: 5px; cursor: pointer; display: block; margin: 20px auto;">Proceed to Checkout</button>
+    {% endif %}
+
+    <!-- Hidden Cart Form -->
+    <form id="cartForm" method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <input type="hidden" id="cartInput" name="cart_data">
+    </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+    let cart = {}; 
+
+    function incrementCount(btn, productId, productName, productPrice) {
+        let countElement = btn.nextElementSibling;
+        let currentCount = parseInt(countElement.innerText);
+        let newCount = currentCount + 1;
+        countElement.innerText = newCount;
+        cart[productId] = { name: productName, price: productPrice, quantity: newCount };
+    }
+
+    function decrementCount(btn, productId) {
+        let countElement = btn.previousElementSibling;
+        let currentCount = parseInt(countElement.innerText);
+        if (currentCount > 0) {
+            let newCount = currentCount - 1;
+            countElement.innerText = newCount;
+            if (newCount === 0) {
+                delete cart[productId];
+            } else {
+                cart[productId].quantity = newCount;
+            }
+        }
+    }
+
+    function proceedToCheckout() {
+        document.getElementById("cartInput").value = JSON.stringify(cart);
+        document.getElementById("cartForm").submit();
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .checkout-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #e3f2fd;
+        padding: 20px;
+    }
+    .checkout-box {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .checkout-title {
+        text-align: center;
+        color: #2e7d32;
+    }
+    .checkout-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .checkout-table th, .checkout-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+    .checkout-table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .checkout-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .checkout-buttons a {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+    }
+    .proceed-btn {
+        background-color: #2e7d32;
+        margin-right: 10px;
+    }
+    .cancel-btn {
+        background-color: #757575;
+    }
+</style>
+
+<div class="checkout-container">
+    <div class="checkout-box">
+        <h2 class="checkout-title">Great Deals, Smooth Checkout!</h2>
+
+        {% if cart %}
+        <table class="checkout-table">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            {% for product_id, product in cart.items %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="checkout-buttons">
+            <a href="{% url 'success' %}" class="proceed-btn">Proceed to Checkout</a>
+            <a href="/cart" class="cancel-btn">Cancel</a>
+        </div>
+
+        {% else %}
+        <p style="text-align: center; font-size: 18px; color: #555;">Your cart is empty.</p>
+        {% endif %}
+    </div>
+
+     <div class="success-image">
+        <img src="https://cdnl.iconscout.com/lottie/premium/preview/farmers-using-smart-device-for-crop-monitoring-animation-download-in-lottie-json-gif-static-svg-file-formats--nutrition-measuring-farm-app-farming-pack-business-animations-7114658.png?f=webp" alt="Order Success" style="width: 50%; height: auto;">
+        </div>
+    </div>
+</div>
+{% endblock %}

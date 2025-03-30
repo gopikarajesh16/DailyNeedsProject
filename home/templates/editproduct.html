@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .edit-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #e3f2fd;
+        padding: 20px;
+    }
+    .edit-box {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .edit-title {
+        text-align: center;
+        color: #2e7d32;
+    }
+    .edit-form label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+    .edit-form img {
+        border-radius: 5px;
+        margin-bottom: 10px;
+        width: 100px;
+    }
+    .edit-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .edit-buttons button,
+    .edit-buttons a {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+    }
+    .update-btn {
+        background-color: #2e7d32;
+        margin-right: 10px;
+    }
+    .cancel-btn {
+        background-color: #757575;
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-box">
+        <h2 class="edit-title">Edit Product</h2>
+
+        <form method="POST" enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+
+            <label>Product Name:</label>
+            {{ form.name }}
+
+            <label>Price (₹):</label>
+            {{ form.price }}
+
+            <label>Details:</label>
+            {{ form.details }}
+
+            <label>Category:</label>
+            {{ form.ctry }}
+
+            <label>Farmer (Owner):</label>
+            {{ form.farmer }}
+
+            <label>Current Image:</label><br>
+            <img src="{{ form.instance.image.url }}" alt="Product Image">
+
+            <label>Change Image:</label>
+            {{ form.image }}
+
+            <div class="edit-buttons">
+                <button type="submit" class="update-btn">Update Product</button>
+                <a href="/product" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
