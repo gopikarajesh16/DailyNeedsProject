@@ -15,8 +15,8 @@ from .models import Profile
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .models import Products
-
-
+from django.shortcuts import get_object_or_404
+from .models import Order  # Add this line
 
 
 
@@ -284,7 +284,35 @@ def cart_view(request):
     return render(request, 'cart.html', {'items': items, 'total_amount': total_amount})
 
 
+@login_required
+def checkout(request):
+    if request.method == "POST":
+        cart_data = request.POST.get("cart_data")  # Get cart JSON from hidden input
+        import json
+        cart = json.loads(cart_data)  # Convert JSON to Python dict
+        
+        if not cart:
+            messages.error(request, "Your cart is empty.")
+            return redirect("products")
 
+        # Create an order for each product in the cart
+        for product_id, item in cart.items():
+            try:
+                product = Products.objects.get(id=product_id)  # Get product from DB
+                Order.objects.create(
+                    user=request.user,  # Customer placing the order
+                    product=product,
+                    quantity=item["quantity"],
+                    total_price=float(item["price"]) * int(item["quantity"])
+                )
+            except Products.DoesNotExist:
+                messages.error(request, f"Product {item['name']} not found.")
+                continue
+
+        messages.success(request, "Your order has been placed successfully!")
+        return redirect("success")  # Redirect to success page after placing the order
+
+    return redirect("products")  # If accessed via GET, go back to products
 
 
 @login_required
@@ -320,7 +348,11 @@ def profile_view(request):
         form = ProfileUpdateForm(instance=profile)  # Pre-fill the form
 
     return render(request, 'profile.html', {'form': form})
+@login_required
+def orders(request):
+    user_orders = Order.objects.filter(user=request.user).order_by("-order_date")  # Show latest orders first
 
+    return render(request, "orders.html", {"orders": user_orders})
 
 
 
@@ -339,3 +371,48 @@ def profile_view(request):
 
     return render(request, 'profile.html', {'form': form})
 
+# @login_required
+# def farmer_orders(request):
+
+
+#     orders = Order.objects.filter(product__farmer=request.user)
+#     return render(request, "farmer_orders.html", {"orders": orders})
+
+@login_required
+def farmer_orders(request):
+    # Ensure the logged-in user is the farmer of the product
+    orders = Order.objects.filter(product__farmer=request.user).order_by("-order_date")
+
+    return render(request, "farmer_orders.html", {"orders": orders})
+
+
+
+    from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import Order
+
+@login_required
+def update_order_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if order.product.farmer != request.user:  # Ensure only the farmer can update
+        return HttpResponseForbidden("You are not allowed to update this order.")
+
+    if request.method == "POST":
+        order.status = request.POST.get("status")
+        order.save()
+    return redirect("farmer_orders")
+
+
+@login_required
+def rate_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if request.method == "POST":
+        rating = int(request.POST.get("rating"))
+        if 1 <= rating <= 5:  # Ensure rating is between 1 and 5
+            order.rating = rating
+            order.save()
+    
+    return redirect("orders")  # Redirect back to orders page

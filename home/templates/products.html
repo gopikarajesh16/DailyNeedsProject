@@ -19,11 +19,8 @@
         </div>
 
     {% else %} 
-
-    <h2 style="text-align: center; color: #2e7d32; margin-top: 20px;">Your Products</h2>
-    
+        <h2 style="text-align: center; color: #2e7d32; margin-top: 20px;">Your Products</h2>
     {% endif %}
-
 
     <!-- Product Cards -->
     <div class="main" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px;">
@@ -42,9 +39,11 @@
                 <a href="/deleteproduct/{{i.id}}" style="background-color: #d32f2f; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 5px;">Delete</a>
             
             {% else %}
-                <button onclick="incrementCount(this, '{{ i.id }}', '{{ i.name }}', '{{ i.price }}')" style="background-color: #388e3c; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Add to Cart</button>
+                <button onclick="incrementCount('{{ i.id }}', '{{ i.name }}', '{{ i.price }}')" 
+                    style="background-color: #388e3c; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Add</button>
                 <span id="count-{{ i.id }}" style="font-size: 18px; font-weight: bold;">0</span>
-                <button onclick="decrementCount(this, '{{ i.id }}')" style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Remove</button>
+                <button onclick="decrementCount('{{ i.id }}')" 
+                    style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Remove</button>
             {% endif %}
         </div>
         {% endfor %}
@@ -71,20 +70,22 @@
 <script>
     let cart = {}; 
 
-    function incrementCount(btn, productId, productName, productPrice) {
-        let countElement = btn.nextElementSibling;
+    function incrementCount(productId, productName, productPrice) {
+        let countElement = document.getElementById("count-" + productId);
         let currentCount = parseInt(countElement.innerText);
         let newCount = currentCount + 1;
         countElement.innerText = newCount;
+        
         cart[productId] = { name: productName, price: productPrice, quantity: newCount };
     }
 
-    function decrementCount(btn, productId) {
-        let countElement = btn.previousElementSibling;
+    function decrementCount(productId) {
+        let countElement = document.getElementById("count-" + productId);
         let currentCount = parseInt(countElement.innerText);
         if (currentCount > 0) {
             let newCount = currentCount - 1;
             countElement.innerText = newCount;
+
             if (newCount === 0) {
                 delete cart[productId];
             } else {
@@ -94,6 +95,10 @@
     }
 
     function proceedToCheckout() {
+        if (Object.keys(cart).length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
         document.getElementById("cartInput").value = JSON.stringify(cart);
         document.getElementById("cartForm").submit();
     }

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .orders-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #e3f2fd;
+        padding: 20px;
+    }
+    .orders-box {
+        width: 100%;
+        max-width: 800px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+    .orders-title {
+        text-align: center;
+        color: #2e7d32;
+    }
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .orders-table th, .orders-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+    .orders-table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .update-form select, .update-form button {
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+    }
+    .update-form button {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        margin-left: 10px;
+    }
+
+    /* Rating Display */
+    .rating-display {
+        margin-top: 5px;
+        font-size: 16px;
+        color: #ff9800;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .orders-box {
+            padding: 20px;
+        }
+        .orders-table th, .orders-table td {
+            padding: 8px;
+            font-size: 14px;
+        }
+        .update-form select, .update-form button {
+            font-size: 12px;
+            padding: 6px;
+        }
+        .orders-container {
+            padding: 10px;
+        }
+        .orders-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+</style>
+
+<div class="orders-container">
+    <div class="orders-box">
+        <h2 class="orders-title">Your Product Orders</h2>
+        <table class="orders-table">
+            <tr>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Rating</th>
+                <th>Customer Address</th> <!-- New column for address -->
+                <th>Update Status</th>
+            </tr>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.user.username }}</td>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>
+                    {% if order.rating %}
+                        <div class="rating-display">
+                            ⭐ Rated: {{ order.rating }}/5
+                        </div>
+                    {% else %}
+                        No Rating Yet
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Accessing the address from the Profile model -->
+                    {% if order.user.profile.address %}
+                        {{ order.user.profile.address }}
+                    {% else %}
+                        Address not available
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'update_order_status' order.id %}" class="update-form">
+                        {% csrf_token %}
+                        <select name="status">
+                            <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                            <option value="Completed" {% if order.status == "Completed" %}selected{% endif %}>Completed</option>
+                            <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

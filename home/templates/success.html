@@ -6,63 +6,68 @@
     html, body {
         height: 100%;
         margin: 0;
-        background-color: #ffffff; /* White background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa; /* Light gray background */
     }
-    
+
     .success-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        background-color: #ffffff;
+        min-height: 100vh; /* Full viewport height */
         padding: 20px;
     }
 
     .success-box {
         display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        justify-content: space-between;
         width: 100%;
-        max-width: 800px;
+        max-width: 600px;
         background: white;
         padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: left;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
     }
 
     .success-message {
-        font-size: 22px;
+        font-size: 24px;
         color: #333;
-        margin-top: 10px;
+        font-weight: bold;
+        margin-bottom: 10px;
     }
 
     .success-box p {
         color: #555;
         font-size: 16px;
-        margin-top: 10px;
+        margin-top: 5px;
     }
 
     .success-buttons {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 10px;
+        gap: 12px;
         margin-top: 20px;
     }
 
     .btn {
-        flex: 1;
-        min-width: 140px;
+        min-width: 150px;
         padding: 12px;
         border: none;
         border-radius: 8px;
         font-size: 16px;
+        font-weight: bold;
         cursor: pointer;
         text-align: center;
         color: white;
         text-decoration: none;
-        transition: 0.3s ease;
+        transition: all 0.3s ease;
     }
 
     .btn-home {
@@ -70,31 +75,30 @@
     }
 
     .btn-orders {
-        background-color: #2e7d32;
+        background-color: #28a745;
     }
 
     .btn:hover {
-        opacity: 0.85;
+        transform: translateY(-2px);
+        opacity: 0.9;
     }
 
-    .success-image {
-        margin-top: 20px;
-    }
-
-    .success-image img {
-        max-width: 50%; /* Adjusting size */
-        height: auto;
-        border-radius: 10px;
-        display: block;
-        margin: 0 auto;
+    /* Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
     /* Mobile Responsiveness */
     @media (max-width: 600px) {
         .success-box {
             padding: 20px;
-            flex-direction: column;
-            align-items: center;
         }
         .success-message {
             font-size: 20px;
@@ -108,29 +112,21 @@
         }
         .success-buttons {
             flex-direction: column;
-        }
-        .success-image {
-            margin-top: 20px;
-            max-width: 100%;
+            gap: 8px;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="success-container">
+<div class="success-container" style="margin-top: 30vh;">
     <div class="success-box">
-        <div>
-            <h2 class="success-message">Thank You! Your Order Has Been Placed Successfully.</h2>
-            <p>We have received your order and are processing it. You will receive an update soon.</p>
-
-            <div class="success-buttons">
-                <a href="/" class="btn btn-home">Back to Home</a>
-                <a href="/orders" class="btn btn-orders">View Orders</a>
-            </div>
-        </div>
-        <div class="success-image">
-            <img src="https://cdnl.iconscout.com/lottie/premium/preview/farmers-using-smart-device-for-crop-monitoring-animation-download-in-lottie-json-gif-static-svg-file-formats--nutrition-measuring-farm-app-farming-pack-business-animations-7114658.png?f=webp" alt="Order Success" />
+        <h2 class="success-message">Thank You! Your Order Has Been Placed Successfully.</h2>
+        <p>We have received your order and are processing it. You will receive an update soon.</p>
+        
+        <div class="success-buttons">
+            <a href="/" class="btn btn-home">Back to Home</a>
+            <a href="/orders" class="btn btn-orders">View Orders</a>
         </div>
     </div>
 </div>

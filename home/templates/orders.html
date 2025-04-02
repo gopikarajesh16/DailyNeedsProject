@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .orders-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #e3f2fd;
+        padding: 20px;
+    }
+    .orders-box {
+        width: 100%;
+        max-width: 1000px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+    .orders-title {
+        text-align: center;
+        color: #2e7d32;
+        font-size: 24px;
+    }
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .orders-table th, .orders-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+    .orders-table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .rating-form select, .rating-form button {
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+    }
+    .rating-form button {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        margin-left: 10px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .orders-box {
+            padding: 20px;
+        }
+        .orders-table th, .orders-table td {
+            padding: 8px;
+            font-size: 14px;
+        }
+        .rating-form select, .rating-form button {
+            font-size: 12px;
+            padding: 6px;
+        }
+        .orders-container {
+            padding: 10px;
+        }
+        .orders-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+</style>
+
+<div class="orders-container">
+    <div class="orders-box">
+        <h2 class="orders-title">My Orders</h2>
+        <table class="orders-table">
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Order Date</th>
+                <th>Rating</th>
+            </tr>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                <td>
+                    {% if order.status == "Completed" %}
+                        {% if order.rating %}
+                            ⭐ Rated: {{ order.rating }}/5
+                        {% else %}
+                            <form action="{% url 'rate_order' order.id %}" method="POST" class="rating-form">
+                                {% csrf_token %}
+                                <select name="rating">
+                                    <option value="1" {% if order.rating == 1 %}selected{% endif %}>⭐</option>
+                                    <option value="2" {% if order.rating == 2 %}selected{% endif %}>⭐⭐</option>
+                                    <option value="3" {% if order.rating == 3 %}selected{% endif %}>⭐⭐⭐</option>
+                                    <option value="4" {% if order.rating == 4 %}selected{% endif %}>⭐⭐⭐⭐</option>
+                                    <option value="5" {% if order.rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        ❌ Not Completed
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No orders found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

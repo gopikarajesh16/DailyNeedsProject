@@ -55,3 +55,46 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+# class Order(models.Model):
+#     STATUS_CHOICES = [
+#         ("Pending", "Pending"),
+#         ("Completed", "Completed"),
+#         ("Cancelled", "Cancelled"),
+#     ]
+
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Customer placing the order
+#     product = models.ForeignKey("Products", on_delete=models.CASCADE)  # Ordered product
+#     quantity = models.PositiveIntegerField(default=1)  # Number of items ordered
+#     total_price = models.CharField(max_length=20)  # Total price as CharField (as you prefer)
+#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")  # Order status
+#     order_date = models.DateTimeField(auto_now_add=True)  # Auto-set when the order is created
+
+#     def __str__(self):
+#         return f"Order {self.id} by {self.user.username} for {self.product.name}"
+
+#     @property
+#     def farmer(self):
+#         """Get the farmer (seller) from the product."""
+#         return self.product.farmer  # Product model already has 'farmer' field (ForeignKey to User)
+from django.db import models
+from django.contrib.auth.models import User
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ("Pending", "Pending"),
+        ("Completed", "Completed"),
+        ("Cancelled", "Cancelled"),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Customer
+    product = models.ForeignKey("Products", on_delete=models.CASCADE)  # Ordered product
+    quantity = models.PositiveIntegerField(default=1)
+    total_price = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
+    order_date = models.DateTimeField(auto_now_add=True)
+    
+    rating = models.IntegerField(null=True, blank=True)  # New rating field (1-5)
+
+    def __str__(self):
+        return f"Order {self.id} - {self.product.name} ({self.user.username})"

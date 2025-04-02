@@ -119,8 +119,11 @@ urlpatterns = [
     path('profile/', profilefn, name='profile'),
     path('checkout/', checkout, name='checkout'),
     path('success', success, name='success'),
-    path('addproduct/', addproductsfn, name='addproducts')
-
+    path('addproduct/', addproductsfn, name='addproducts'),
+    path("farmer/orders/", farmer_orders, name="farmer_orders"),
+    path("order/<int:order_id>/update/", update_order_status, name="update_order_status"),
+    path("orders/", orders, name="orders"),
+    path("order/<int:order_id>/rate/", rate_order, name="rate_order"),
     
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT) 
 
