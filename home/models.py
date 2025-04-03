@@ -22,16 +22,7 @@ class Products(models.Model):
     def __str__(self):
         return self.name
 
-# class Profile(models.Model):
-#     us = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=30, blank=True, null=True)  # Optional phone field
-#     image = models.ImageField(upload_to='profilepic', blank=True, null=True)  # Optional profile pic
-#     address = models.TextField(blank=True, null=True)
-#     is_farmer = models.BooleanField(default=False)  # ✅ This field correctly tracks farmer status
-#     created_at = models.DateTimeField(default=timezone.now)  # Timestamp
 
-#     def __str__(self):
-#         return str(self.us)
 
 class Profile(models.Model):
     us = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,27 +47,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# class Order(models.Model):
-#     STATUS_CHOICES = [
-#         ("Pending", "Pending"),
-#         ("Completed", "Completed"),
-#         ("Cancelled", "Cancelled"),
-#     ]
 
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Customer placing the order
-#     product = models.ForeignKey("Products", on_delete=models.CASCADE)  # Ordered product
-#     quantity = models.PositiveIntegerField(default=1)  # Number of items ordered
-#     total_price = models.CharField(max_length=20)  # Total price as CharField (as you prefer)
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")  # Order status
-#     order_date = models.DateTimeField(auto_now_add=True)  # Auto-set when the order is created
-
-#     def __str__(self):
-#         return f"Order {self.id} by {self.user.username} for {self.product.name}"
-
-#     @property
-#     def farmer(self):
-#         """Get the farmer (seller) from the product."""
-#         return self.product.farmer  # Product model already has 'farmer' field (ForeignKey to User)
 from django.db import models
 from django.contrib.auth.models import User
 
