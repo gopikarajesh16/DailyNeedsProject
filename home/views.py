@@ -51,20 +51,46 @@ def profilefn(request):
 #     g=Category.objects.all()
 #     return render(request,'products.html',{'pro':c,'cat':g})
 
+# def productfn(request):
+#     c = Products.objects.all()
+#     g = Category.objects.all()
+    
+#     # Ensure price is always a float
+#     for product in c:
+#         try:
+#             product.price = float(product.price)  # Convert price to float
+#         except (ValueError, TypeError):
+#             product.price = 0.00  # Default to 0.00 if conversion fails
+    
+#     return render(request, 'products.html', {'pro': c, 'cat': g})
+from django.db.models import Avg,Count
+
+# def productfn(request):
+#     c = Products.objects.all().annotate(avg_rating=Avg('order__rating'))  # Calculate average rating
+#     g = Category.objects.all()
+    
+#     for product in c:
+#         try:
+#             product.price = float(product.price)  # Ensure price is float
+#         except (ValueError, TypeError):
+#             product.price = 0.00  # Default to 0.00 if conversion fails
+    
+#     return render(request, 'products.html', {'pro': c, 'cat': g})
+
 def productfn(request):
-    c = Products.objects.all()
+    c = Products.objects.all().annotate(
+        avg_rating=Avg('order__rating'),  # Calculate average rating
+        rating_count=Count('order__rating')  # Count number of ratings
+    )
     g = Category.objects.all()
     
-    # Ensure price is always a float
     for product in c:
         try:
-            product.price = float(product.price)  # Convert price to float
+            product.price = float(product.price)  # Ensure price is float
         except (ValueError, TypeError):
             product.price = 0.00  # Default to 0.00 if conversion fails
     
     return render(request, 'products.html', {'pro': c, 'cat': g})
-
-
 
 def categoryfn(request,p_id):
     g=Category.objects.all()

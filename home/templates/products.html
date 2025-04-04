@@ -44,6 +44,16 @@
                 <span id="count-{{ i.id }}" style="font-size: 18px; font-weight: bold;">0</span>
                 <button onclick="decrementCount('{{ i.id }}')" 
                     style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Remove</button>
+                    <p>
+                        {% if i.avg_rating %}
+                            <span style="font-weight: bold; color: #ff9800;">⭐ {{ i.avg_rating|floatformat:1 }} / 5</span> 
+                            <span style="color: black;">({{ i.rating_count }})</span>
+                        {% else %}
+                            <span style="color: black;">No ratings yet</span>
+                        {% endif %}
+                    </p>
+                    
+                        
             {% endif %}
         </div>
         {% endfor %}
