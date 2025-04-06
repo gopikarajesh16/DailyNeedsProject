@@ -17,7 +17,6 @@
                 </a>
             {% endfor %}
         </div>
-
     {% else %} 
         <h2 style="text-align: center; color: #2e7d32; margin-top: 20px;">Your Products</h2>
     {% endif %}
@@ -39,21 +38,24 @@
                 <a href="/deleteproduct/{{i.id}}" style="background-color: #d32f2f; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 5px;">Delete</a>
             
             {% else %}
-                <button onclick="incrementCount('{{ i.id }}', '{{ i.name }}', '{{ i.price }}')" 
-                    style="background-color: #388e3c; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Add</button>
-                <span id="count-{{ i.id }}" style="font-size: 18px; font-weight: bold;">0</span>
-                <button onclick="decrementCount('{{ i.id }}')" 
-                    style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">Remove</button>
-                    <p>
-                        {% if i.avg_rating %}
-                            <span style="font-weight: bold; color: #ff9800;">⭐ {{ i.avg_rating|floatformat:1 }} / 5</span> 
-                            <span style="color: black;">({{ i.rating_count }})</span>
-                        {% else %}
-                            <span style="color: black;">No ratings yet</span>
-                        {% endif %}
-                    </p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
+                    <button onclick="decrementCount('{{ i.id }}')" 
+                        style="background-color: #d32f2f; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer;">-</button>
                     
-                        
+                    <span id="count-{{ i.id }}" style="font-size: 18px; font-weight: bold; width: 30px; text-align: center;">0</span>
+                    
+                    <button onclick="incrementCount('{{ i.id }}', '{{ i.name }}', '{{ i.price }}')" 
+                        style="background-color: #388e3c; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer;">+</button>
+                </div>
+
+                <div style="margin-top: 8px;">
+                    {% if i.avg_rating %}
+                        <span style="font-weight: bold; color: #ff9800;">⭐ {{ i.avg_rating|floatformat:1 }} / 5</span> 
+                        <span style="color: black;">({{ i.rating_count }})</span>
+                    {% else %}
+                        <span style="color: black;">No ratings yet</span>
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
         {% endfor %}
