@@ -30,7 +30,7 @@
             <p style="color: #555;">{{ i.details }}</p>
             <p style="font-weight: bold; color: #2e7d32;">RS:{{ i.price|floatformat:2 }}</p>
 
-            {% if request.path == "/product/" %}
+            {% if request.path == "/product/" or is_farmer%}
                 <a href="{% url 'viewproduct' i.id %}" style="background-color: #2e7d32; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px;">View Product</a>
                 
                 <!-- EDIT & DELETE BUTTONS (FOR ADMIN) -->

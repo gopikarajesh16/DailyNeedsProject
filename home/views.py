@@ -243,11 +243,21 @@ def deleteproductfn(request,p_id):
     else:
         return render(request,'deleteproduct.html')
 
+# def searchfn(request):
+#     o=request.GET['ghi']
+#     g=Category.objects.all()
+#     c=Products.objects.filter(name__icontains=o)
+#     return render(request,'products.html',{'pro':c,'cat':g})
+
 def searchfn(request):
-    o=request.GET['ghi']
-    g=Category.objects.all()
-    c=Products.objects.filter(name__icontains=o)
-    return render(request,'products.html',{'pro':c,'cat':g})
+    query = request.GET.get('ghi', '')  # Get search query
+    categories = Category.objects.all()
+    products = Products.objects.filter(name__icontains=query)
+
+    # Check if the user is a farmer
+    is_farmer = request.user.is_authenticated and request.user.profile.is_farmer
+
+    return render(request, 'products.html', {'pro': products, 'cat': categories, 'is_farmer': is_farmer})
 
 
 def newapifn(request):
